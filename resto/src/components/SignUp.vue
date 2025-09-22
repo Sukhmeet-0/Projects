@@ -1,22 +1,43 @@
 <script>
+    import axios from 'axios'
     export default{
-        name:"SignUp"
+        name:"SignUp",
+        data(){
+            return{
+                name:"",
+                email:"",
+                password:"",
+            }
+        },
+        methods:{
+            async signUp(){
+                let result = await axios.post("http://localhost:3000/users",{
+                    email:this.email,
+                    password:this.password,
+                    name:this.name
+                })
+                console.warn("sign up",this.name,this.email,this.password)
+                if(result.status == 201){
+                    alert("sign-up done")
+                    localStorage.setItem("user-info",JSON.stringify(result.data))
+                }
+            }
+        }
     }
 </script>
 <template>
     <img src="../assets/logo.png" alt="" class="logo">
     <h1>Sign Up</h1>
     <div class="register">
-        <input type="text" placeholder="Enter name"/>
-        <input type="email" placeholder="Enter email"/>
-        <input type="password" placeholder="Enter password">
-        <button>Sign Up</button>
+        <input type="text" v-model="name" placeholder="Enter name"/>
+        <input type="email" v-model="email" placeholder="Enter email"/>
+        <input type="password" v-model="password" placeholder="Enter password">
+        <button v-on:click="signUp" >Sign Up</button>
     </div>
 </template>
 <style>
     .logo{
         width: 200px;
-       
     }
     .register input{
         width: 300px;
